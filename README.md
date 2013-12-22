@@ -1,0 +1,4 @@
+opencv-laboratory
+=================
+
+OpenCV samles
