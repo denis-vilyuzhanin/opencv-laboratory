@@ -1,0 +1,34 @@
+﻿Build started 22-Dec-13 12:03:48.
+     1>Project "E:\opencv-laboratory\Samples\ShowImage\ShowImage.vcxproj" on node 2 (rebuild target(s)).
+     1>PrepareForBuild:
+         Creating directory "E:\opencv-laboratory\Samples\OpenCV-Debug\".
+       InitializeBuildStatus:
+         Creating "OpenCV-Debug\ShowImage.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"OpenCV-Debug\ShowImage.pch" /Fo"OpenCV-Debug\\" /Fd"OpenCV-Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"OpenCV-Debug\ShowImage.pch" /Fo"OpenCV-Debug\\" /Fd"OpenCV-Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ShowImage.cpp
+         ShowImage.cpp
+       ManifestResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"OpenCV-Debug\ShowImage.exe.embed.manifest.res" OpenCV-Debug\ShowImage_manifest.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\opencv-laboratory\Samples\OpenCV-Debug\ShowImage.exe" /INCREMENTAL /NOLOGO opencv_core243d.lib opencv_imgproc243d.lib opencv_highgui243d.lib opencv_ml243d.lib opencv_video243d.lib opencv_features2d243d.lib opencv_calib3d243d.lib opencv_objdetect243d.lib opencv_contrib243d.lib opencv_legacy243d.lib opencv_flann243d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"OpenCV-Debug\ShowImage.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"E:\opencv-laboratory\Samples\OpenCV-Debug\ShowImage.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\opencv-laboratory\Samples\OpenCV-Debug\ShowImage.lib" /MACHINE:X86 "OpenCV-Debug\ShowImage.exe.embed.manifest.res"
+         "OpenCV-Debug\ShowImage.obj"
+         "OpenCV-Debug\stdafx.obj"
+       Manifest:
+         Deleting file "OpenCV-Debug\ShowImage.exe.embed.manifest".
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"OpenCV-Debug\ShowImage.exe.embed.manifest" /manifest "OpenCV-Debug\ShowImage.exe.intermediate.manifest"
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"OpenCV-Debug\ShowImage.exe.embed.manifest.res" OpenCV-Debug\ShowImage_manifest.rc 
+       LinkEmbedManifest:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\opencv-laboratory\Samples\OpenCV-Debug\ShowImage.exe" /INCREMENTAL /NOLOGO opencv_core243d.lib opencv_imgproc243d.lib opencv_highgui243d.lib opencv_ml243d.lib opencv_video243d.lib opencv_features2d243d.lib opencv_calib3d243d.lib opencv_objdetect243d.lib opencv_contrib243d.lib opencv_legacy243d.lib opencv_flann243d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"OpenCV-Debug\ShowImage.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"E:\opencv-laboratory\Samples\OpenCV-Debug\ShowImage.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\opencv-laboratory\Samples\OpenCV-Debug\ShowImage.lib" /MACHINE:X86 "OpenCV-Debug\ShowImage.exe.embed.manifest.res"
+         "OpenCV-Debug\ShowImage.obj"
+         "OpenCV-Debug\stdafx.obj"
+         ShowImage.vcxproj -> E:\opencv-laboratory\Samples\OpenCV-Debug\ShowImage.exe
+       FinalizeBuildStatus:
+         Deleting file "OpenCV-Debug\ShowImage.unsuccessfulbuild".
+         Touching "OpenCV-Debug\ShowImage.lastbuildstate".
+     1>Done Building Project "E:\opencv-laboratory\Samples\ShowImage\ShowImage.vcxproj" (rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:04.87
