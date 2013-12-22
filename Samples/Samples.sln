@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShowImage", "ShowImage\Show
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mat", "Mat\Mat.vcxproj", "{E09862DA-F16C-4820-84AA-6D6435CACB40}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Laboratory", "Laboratory\Laboratory.vcxproj", "{D6B26143-815E-40D2-9FFE-9421E1BD3856}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -24,6 +26,12 @@ Global
 		{E09862DA-F16C-4820-84AA-6D6435CACB40}.OpenCV-Debug|Win32.Build.0 = Debug|Win32
 		{E09862DA-F16C-4820-84AA-6D6435CACB40}.Release|Win32.ActiveCfg = Release|Win32
 		{E09862DA-F16C-4820-84AA-6D6435CACB40}.Release|Win32.Build.0 = Release|Win32
+		{D6B26143-815E-40D2-9FFE-9421E1BD3856}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D6B26143-815E-40D2-9FFE-9421E1BD3856}.Debug|Win32.Build.0 = Debug|Win32
+		{D6B26143-815E-40D2-9FFE-9421E1BD3856}.OpenCV-Debug|Win32.ActiveCfg = Debug|Win32
+		{D6B26143-815E-40D2-9FFE-9421E1BD3856}.OpenCV-Debug|Win32.Build.0 = Debug|Win32
+		{D6B26143-815E-40D2-9FFE-9421E1BD3856}.Release|Win32.ActiveCfg = Release|Win32
+		{D6B26143-815E-40D2-9FFE-9421E1BD3856}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
