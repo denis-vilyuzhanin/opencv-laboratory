@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
 Application::Application() :
 		sourceWindow("OpenCV Laboratory Application"),
 		sourceImage(1, 1, CV_8UC3) {
-
+	mainMenu.addAction(new DoNothingAction());
 }
 
 Application::~Application() {
@@ -32,6 +32,9 @@ int Application::run() {
 	namedWindow(sourceWindow, CV_WINDOW_AUTOSIZE); // Create a window for display.
 	imshow(sourceWindow, sourceImage);       // Show our image inside it.
 
-	waitKey(0);
+	mainMenu.show();
+	MainMenu::Action& nextAction = mainMenu.waitAction();
+	nextAction.handle();
+
 	return 0;
 }

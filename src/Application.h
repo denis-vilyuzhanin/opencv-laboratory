@@ -13,6 +13,8 @@
 #include <iostream>
 #include <string>
 
+#include "MainMenu.h"
+
 using std::string;
 using namespace cv;
 
@@ -24,9 +26,24 @@ public:
 	int run();
 
 private:
+	class DoNothingAction: public MainMenu::Action {
+	public:
+		DoNothingAction() {
+			key = 'n';
+			description = "Do nothing";
+		}
+
+		void handle() {
+			std::cout<<"Nothing Done"<<std::endl;
+		}
+	};
+
+private:
 	const string sourceWindow;
 
 	Mat sourceImage;
+
+	MainMenu mainMenu;
 };
 
 #endif /* APPLICATION_H_ */
