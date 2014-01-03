@@ -18,7 +18,7 @@ class ImageSourceView {
 public:
 	ImageSourceView();
 	virtual ~ImageSourceView();
-
+	void changeImageSource(ImageSource* imageSource);
 	void paint();
 private:
 	const string window;

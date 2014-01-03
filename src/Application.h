@@ -29,6 +29,10 @@ public:
 
 	void showMainMenu();
 
+	ImageSourceView& getImageView() {
+		return imageView;
+	}
+
 
 private:
 	Mat sourceImage;

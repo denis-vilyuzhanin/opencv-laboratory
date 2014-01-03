@@ -23,3 +23,7 @@ void ImageSourceView::paint() {
 	imageSource->readImage(image);
 	imshow(window, image);
 }
+
+void ImageSourceView::changeImageSource(ImageSource* imageSource) {
+	this->imageSource = imageSource;
+}

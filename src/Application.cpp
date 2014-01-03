@@ -21,6 +21,7 @@ Application::Application() :
 		isClosed(false) {
 	mainMenu.addAction(new ApplicationActions::CloseAction(*this));
 	mainMenu.addAction(new ApplicationActions::ShowMainMenuAction(*this));
+	mainMenu.addAction(new ApplicationActions::OpenFile(*this));
 }
 
 Application::~Application() {
@@ -34,6 +35,7 @@ int Application::run() {
 	while(!isClosed) {
 		       // Show our image inside it.
 		showMainMenu();
+		imageView.paint();
 		MainMenu::Action& nextAction = mainMenu.waitAction();
 		nextAction.handle();
 	}

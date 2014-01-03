@@ -11,7 +11,7 @@
 #include <string>
 
 #include "Application.h"
-
+#include "FileImageSource.h"
 using namespace std;
 
 class ApplicationActions {
@@ -69,6 +69,8 @@ public:
 			cout<<endl<< "Please input path to file you want to open: ";
 			string path;
 			getline(cin, path);
+
+			application.getImageView().changeImageSource(new FileImageSource(path));
 		}
 	};
 };
