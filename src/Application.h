@@ -24,26 +24,14 @@ public:
 	virtual ~Application();
 
 	int run();
+	void close();
 
-private:
-	class DoNothingAction: public MainMenu::Action {
-	public:
-		DoNothingAction() {
-			key = 'n';
-			description = "Do nothing";
-		}
-
-		void handle() {
-			std::cout<<"Nothing Done"<<std::endl;
-		}
-	};
 
 private:
 	const string sourceWindow;
-
 	Mat sourceImage;
-
 	MainMenu mainMenu;
+	bool isClosed;
 };
 
 #endif /* APPLICATION_H_ */

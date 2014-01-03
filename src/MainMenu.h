@@ -13,6 +13,21 @@
 using namespace std;
 
 class MainMenu {
+public:
+	class Action;
+
+public:
+	MainMenu();
+	virtual ~MainMenu();
+
+	void addAction(Action* action);
+
+	void show();
+
+	Action& waitAction();
+
+private:
+	map<char, Action*> actions;
 
 public:
 	class Action {
@@ -26,22 +41,22 @@ public:
 		string getDescription() {
 			return description;
 		}
+
+		string getDisplayKey() {
+			return displayKey;
+		}
 	protected:
 		char key;
+		string displayKey;
 		string description;
 	};
 
-public:
-	MainMenu();
-	virtual ~MainMenu();
 
-	void addAction(Action* action);
-
-	void show();
-
-	Action& waitAction();
-private:
-	map<char, Action*> actions;
+	class Nothing: public Action {
+	public:
+		Nothing();
+		void handle();
+	};
 };
 
 #endif /* MAINMENU_H_ */
