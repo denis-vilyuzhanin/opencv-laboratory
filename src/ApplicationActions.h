@@ -7,8 +7,12 @@
 
 #ifndef APPLICATIONACTIONS_H_
 #define APPLICATIONACTIONS_H_
+#include <iostream>
+#include <string>
 
 #include "Application.h"
+
+using namespace std;
 
 class ApplicationActions {
 public:
@@ -48,8 +52,24 @@ public:
 
 		void handle() {
 
+
 		}
 
+	};
+
+	class OpenFile: public ApplicationAction {
+	public:
+		OpenFile(Application& app): ApplicationAction(app) {
+			key = 'o';
+			displayKey = 'o';
+			description = "Open Image/Video file";
+		}
+
+		void handle() {
+			cout<<endl<< "Please input path to file you want to open: ";
+			string path;
+			getline(cin, path);
+		}
 	};
 };
 

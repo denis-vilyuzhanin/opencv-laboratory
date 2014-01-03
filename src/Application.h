@@ -14,6 +14,7 @@
 #include <string>
 
 #include "MainMenu.h"
+#include "ImageSourceView.h"
 
 using std::string;
 using namespace cv;
@@ -30,10 +31,10 @@ public:
 
 
 private:
-	const string sourceWindow;
 	Mat sourceImage;
 	MainMenu mainMenu;
 	bool isClosed;
+	ImageSourceView imageView;
 };
 
 #endif /* APPLICATION_H_ */

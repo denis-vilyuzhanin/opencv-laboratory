@@ -18,8 +18,6 @@ int main(int argc, char** argv) {
 }
 
 Application::Application() :
-		sourceWindow("OpenCV Laboratory Application"),
-		sourceImage(1, 1, CV_8UC3),
 		isClosed(false) {
 	mainMenu.addAction(new ApplicationActions::CloseAction(*this));
 	mainMenu.addAction(new ApplicationActions::ShowMainMenuAction(*this));
@@ -32,10 +30,9 @@ Application::~Application() {
 int Application::run() {
 	cout << "OpenCV Laboratory" << endl;
 
-	namedWindow(sourceWindow, CV_WINDOW_AUTOSIZE); // Create a window for display.
 	
 	while(!isClosed) {
-		imshow(sourceWindow, sourceImage);       // Show our image inside it.
+		       // Show our image inside it.
 		showMainMenu();
 		MainMenu::Action& nextAction = mainMenu.waitAction();
 		nextAction.handle();
