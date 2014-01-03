@@ -29,6 +29,8 @@ public:
 private:
 	map<char, Action*> actions;
 
+private:
+	Action* findNextAction(char key);
 public:
 	class Action {
 	public:

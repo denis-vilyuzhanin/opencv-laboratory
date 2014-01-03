@@ -40,18 +40,19 @@ void MainMenu::show() {
 }
 
 MainMenu::Action& MainMenu::waitAction() {
-	char key;
 	cout<<"?: ";
-	key = waitKey(0);
-	map<char, Action*>::iterator it  = actions.find(key);
-	Action* nextAction;
-	if (it != actions.end()) {
-		nextAction = actions[key];
-	} else {
-		nextAction = actions[-1];
-	}
+	char key = waitKey(0);
+	Action* nextAction = findNextAction(key);
 	cout<<nextAction->getDescription()<<endl;
 	return *(nextAction);
+}
+
+MainMenu::Action* MainMenu::findNextAction(char key) {
+	map<char, Action*>::iterator it  = actions.find(key);
+	if (it != actions.end()) {
+		return it->second;
+	}
+	return actions[-1];
 }
 
 
