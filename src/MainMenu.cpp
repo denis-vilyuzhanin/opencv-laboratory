@@ -15,8 +15,11 @@
 using namespace std;
 using namespace cv;
 
+const char NO_ACTION = -1;
+
 MainMenu::MainMenu() {
-	actions[-1] = new Nothing();
+	unknownAction = new UnknownAction();
+	noAction = new NoAction();
 }
 
 MainMenu::~MainMenu() {
@@ -42,6 +45,8 @@ void MainMenu::show() {
 MainMenu::Action& MainMenu::waitAction() {
 	cout<<"?: ";
 	char key = waitKey(0);
+	if (key < 0)
+		return *noAction;
 	Action* nextAction = findNextAction(key);
 	cout<<nextAction->getDescription()<<endl;
 	return *(nextAction);
@@ -52,16 +57,16 @@ MainMenu::Action* MainMenu::findNextAction(char key) {
 	if (it != actions.end()) {
 		return it->second;
 	}
-	return actions[-1];
+	return unknownAction;
 }
 
 
-MainMenu::Nothing::Nothing(){
+MainMenu::UnknownAction::UnknownAction(){
 	key = -1;
 	displayKey = "";
 	description = "Unknown Action";
 }
 
-void MainMenu::Nothing::handle() {
+void MainMenu::UnknownAction::handle() {
 	
 }

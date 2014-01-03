@@ -28,7 +28,8 @@ public:
 
 private:
 	map<char, Action*> actions;
-
+	Action* unknownAction;
+	Action* noAction;
 private:
 	Action* findNextAction(char key);
 public:
@@ -54,10 +55,15 @@ public:
 	};
 
 
-	class Nothing: public Action {
+	class UnknownAction: public Action {
 	public:
-		Nothing();
+		UnknownAction();
 		void handle();
+	};
+
+	class NoAction: public Action {
+	public:
+		void handle(){}
 	};
 };
 
