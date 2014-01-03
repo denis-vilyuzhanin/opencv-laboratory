@@ -22,6 +22,7 @@ Application::Application() :
 		sourceImage(1, 1, CV_8UC3),
 		isClosed(false) {
 	mainMenu.addAction(new ApplicationActions::CloseAction(*this));
+	mainMenu.addAction(new ApplicationActions::ShowMainMenuAction(*this));
 }
 
 Application::~Application() {
@@ -35,12 +36,16 @@ int Application::run() {
 	
 	while(!isClosed) {
 		imshow(sourceWindow, sourceImage);       // Show our image inside it.
-		mainMenu.show();
+		showMainMenu();
 		MainMenu::Action& nextAction = mainMenu.waitAction();
 		nextAction.handle();
 	}
 
 	return 0;
+}
+
+void Application::showMainMenu() {
+	mainMenu.show();
 }
 
 void Application::close() {

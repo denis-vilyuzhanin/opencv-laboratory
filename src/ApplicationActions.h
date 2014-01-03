@@ -13,23 +13,44 @@
 class ApplicationActions {
 public:
 
-	class CloseAction: public MainMenu::Action {
-		public:
-			CloseAction(Application& app): application(app)  {
-				key = 27;
-				displayKey = "ESC";
-				description = "Click escape to exit";
-			}
-
-
-			void handle() {
-				application.close();
-			}
-
-		private:
-			Application& application;
+	class ApplicationAction: public MainMenu::Action {
+	public:
+		ApplicationAction(Application& app) :
+				application(app) {
+		}
+	protected:
+		Application& application;
 	};
 
+	class CloseAction: public ApplicationAction {
+	public:
+		CloseAction(Application& app) :
+				ApplicationAction(app) {
+			key = 27;
+			displayKey = "ESC";
+			description = "Click escape to exit";
+		}
+
+		void handle() {
+			application.close();
+		}
+
+	};
+
+	class ShowMainMenuAction: public ApplicationAction {
+	public:
+		ShowMainMenuAction(Application& app) :
+				ApplicationAction(app) {
+			key = 13;
+			displayKey = "Enter";
+			description = "Print Main Menu";
+		}
+
+		void handle() {
+
+		}
+
+	};
 };
 
 #endif /* APPLICATIONACTIONS_H_ */

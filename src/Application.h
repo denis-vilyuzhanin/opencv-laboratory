@@ -26,6 +26,8 @@ public:
 	int run();
 	void close();
 
+	void showMainMenu();
+
 
 private:
 	const string sourceWindow;
