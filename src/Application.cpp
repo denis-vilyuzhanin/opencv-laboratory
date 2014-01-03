@@ -32,7 +32,7 @@ int Application::run() {
 	cout << "OpenCV Laboratory" << endl;
 
 	namedWindow(sourceWindow, CV_WINDOW_AUTOSIZE); // Create a window for display.
-
+	
 	while(!isClosed) {
 		imshow(sourceWindow, sourceImage);       // Show our image inside it.
 		mainMenu.show();

@@ -28,10 +28,12 @@ public:
 
 private:
 	map<char, Action*> actions;
+	Action* lastAction;
 	Action* unknownAction;
 	Action* noAction;
 private:
 	Action* findNextAction(char key);
+	bool shouldReprint();
 public:
 	class Action {
 	public:

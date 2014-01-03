@@ -20,6 +20,7 @@ const char NO_ACTION = -1;
 MainMenu::MainMenu() {
 	unknownAction = new UnknownAction();
 	noAction = new NoAction();
+	lastAction = 0;
 }
 
 MainMenu::~MainMenu() {
@@ -32,6 +33,8 @@ void MainMenu::addAction(Action* action) {
 }
 
 void MainMenu::show() {
+	if (!shouldReprint())
+		return;
 	cout<<endl<<endl<<"Please Select Next Action"<<endl;
 	for (map<char,Action*>::iterator it=actions.begin(); it!=actions.end(); ++it) {
 		if (it->first < 0) {
@@ -43,12 +46,18 @@ void MainMenu::show() {
 }
 
 MainMenu::Action& MainMenu::waitAction() {
-	cout<<"?: ";
-	char key = waitKey(0);
-	if (key < 0)
-		return *noAction;
-	Action* nextAction = findNextAction(key);
-	cout<<nextAction->getDescription()<<endl;
+	if (shouldReprint())
+		cout<<"?: ";
+
+	char key = waitKey(300);
+	Action* nextAction = noAction;
+	if (key >= 0)
+		nextAction = findNextAction(key);
+	lastAction = nextAction;
+
+	if (shouldReprint())
+		cout<<nextAction->getDescription()<<endl;
+
 	return *(nextAction);
 }
 
@@ -60,6 +69,9 @@ MainMenu::Action* MainMenu::findNextAction(char key) {
 	return unknownAction;
 }
 
+bool MainMenu::shouldReprint() {
+	return lastAction != noAction;
+}
 
 MainMenu::UnknownAction::UnknownAction(){
 	key = -1;
