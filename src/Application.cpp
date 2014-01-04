@@ -7,13 +7,19 @@
 
 #include "Application.h"
 #include "ApplicationActions.h"
+#include "FileImageSource.h"
 using namespace std;
 using namespace cv;
+
 
 
 int main(int argc, char** argv) {
 	Application application;
 
+	if (argc == 2) {
+		string imagefile = argv[1];
+		application.getImageView().changeImageSource(new FileImageSource(imagefile));
+	}
 	return application.run();
 }
 
@@ -22,6 +28,7 @@ Application::Application() :
 	mainMenu.addAction(new ApplicationActions::CloseAction(*this));
 	mainMenu.addAction(new ApplicationActions::ShowMainMenuAction(*this));
 	mainMenu.addAction(new ApplicationActions::OpenFile(*this));
+	mainMenu.addAction(new ApplicationActions::AddHistogramAction(*this));
 }
 
 Application::~Application() {
@@ -36,6 +43,7 @@ int Application::run() {
 		       // Show our image inside it.
 		showMainMenu();
 		imageView.paint();
+		refreshHistograms();
 		MainMenu::Action& nextAction = mainMenu.waitAction();
 		nextAction.handle();
 	}
@@ -51,4 +59,15 @@ void Application::close() {
 	isClosed = true;
 }
 
+void Application::addHistogram(Histogram* newHistogram) {
+	histograms.push_back(newHistogram);
+}
 
+void  Application::refreshHistograms() {
+	for (std::vector<Histogram*>::iterator it = histograms.begin() ;
+		 it != histograms.end();
+		 ++it){
+		Histogram* next = *it;
+		next->update(imageView.getImage());
+	}
+}

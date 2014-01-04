@@ -9,10 +9,12 @@
 #define APPLICATIONACTIONS_H_
 #include <iostream>
 #include <string>
+using namespace std;
 
 #include "Application.h"
 #include "FileImageSource.h"
-using namespace std;
+#include "histograms/Histogram.h"
+#include "histograms/RGBHistogram.h"
 
 class ApplicationActions {
 public:
@@ -52,25 +54,54 @@ public:
 
 		void handle() {
 
-
 		}
 
 	};
 
 	class OpenFile: public ApplicationAction {
 	public:
-		OpenFile(Application& app): ApplicationAction(app) {
+		OpenFile(Application& app) :
+				ApplicationAction(app) {
 			key = 'o';
 			displayKey = 'o';
 			description = "Open Image/Video file";
 		}
 
 		void handle() {
-			cout<<endl<< "Please input path to file you want to open: ";
+			cout << endl << "Please input path to file you want to open: ";
 			string path;
 			getline(cin, path);
 
-			application.getImageView().changeImageSource(new FileImageSource(path));
+			application.getImageView().changeImageSource(
+					new FileImageSource(path));
+		}
+	};
+
+	class AddHistogramAction: public ApplicationAction {
+	public:
+		AddHistogramAction(Application& app) :
+				ApplicationAction(app) {
+			key = 'h';
+			displayKey = 'h';
+			description = "Add Histogram";
+		}
+
+		void handle() {
+			cout << endl << "Available Histograms: ";
+			cout << "\t[rgb] " << "RGB historgam" << endl;
+			cout << endl << "Please select histogram from list above: ";
+			string type;
+			getline(cin, type);
+
+			Histogram* histogram = 0;
+
+			if (type == "rgb") {
+				histogram = new RGBHistogram();
+			}
+
+			if (histogram != 0) {
+				application.addHistogram(histogram);
+			}
 		}
 	};
 };

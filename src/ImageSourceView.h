@@ -20,6 +20,7 @@ public:
 	virtual ~ImageSourceView();
 	void changeImageSource(ImageSource* imageSource);
 	void paint();
+	Mat getImage();
 private:
 	const string window;
 	Mat image;

@@ -27,3 +27,7 @@ void ImageSourceView::paint() {
 void ImageSourceView::changeImageSource(ImageSource* imageSource) {
 	this->imageSource = imageSource;
 }
+
+Mat ImageSourceView::getImage() {
+	return image;
+}

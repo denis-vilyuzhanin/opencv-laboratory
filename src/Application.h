@@ -15,6 +15,9 @@
 
 #include "MainMenu.h"
 #include "ImageSourceView.h"
+#include "histograms/Histogram.h"
+#include "histograms/RGBHistogram.h"
+
 
 using std::string;
 using namespace cv;
@@ -33,12 +36,15 @@ public:
 		return imageView;
 	}
 
+	void addHistogram(Histogram*);
+	void refreshHistograms();
 
 private:
 	Mat sourceImage;
 	MainMenu mainMenu;
 	bool isClosed;
 	ImageSourceView imageView;
+	vector<Histogram*> histograms;
 };
 
 #endif /* APPLICATION_H_ */
