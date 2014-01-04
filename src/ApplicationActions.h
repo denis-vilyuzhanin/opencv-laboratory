@@ -15,6 +15,7 @@ using namespace std;
 #include "FileImageSource.h"
 #include "histograms/Histogram.h"
 #include "histograms/RGBHistogram.h"
+#include "histograms/HSLHistogram.h"
 
 class ApplicationActions {
 public:
@@ -89,6 +90,7 @@ public:
 		void handle() {
 			cout << endl << "Available Histograms: ";
 			cout << "\t[rgb] " << "RGB historgam" << endl;
+			cout << "\t[hsl] " << "RGB historgam" << endl;
 			cout << endl << "Please select histogram from list above: ";
 			string type;
 			getline(cin, type);
@@ -97,6 +99,8 @@ public:
 
 			if (type == "rgb") {
 				histogram = new RGBHistogram();
+			} else if (type == "hsl") {
+				histogram = new HSLHistogram();
 			}
 
 			if (histogram != 0) {
