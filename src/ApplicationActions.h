@@ -16,6 +16,7 @@ using namespace std;
 #include "histograms/Histogram.h"
 #include "histograms/RGBHistogram.h"
 #include "histograms/HSLHistogram.h"
+#include "histograms/DIMHistogram.h"
 
 class ApplicationActions {
 public:
@@ -101,6 +102,8 @@ public:
 				histogram = new RGBHistogram();
 			} else if (type == "hsl") {
 				histogram = new HSLHistogram();
+			} else if (type == "dim") {
+				histogram = new DIMHistogram();
 			}
 
 			if (histogram != 0) {

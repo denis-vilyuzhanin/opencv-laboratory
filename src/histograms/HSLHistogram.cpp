@@ -25,8 +25,8 @@ void HSLHistogram::update(Mat image) {
 	cvtColor(image,imageHLS,CV_RGB2HLS);
 
 	/// Separate the image in 3 places ( B, G and R )
-	vector<Mat> bgr_planes;
-	split(imageHLS, bgr_planes);
+	vector<Mat> hls_planes;
+	split(imageHLS, hls_planes);
 
 	/// Establish the number of bins
 	int histSize = 256;
@@ -41,11 +41,11 @@ void HSLHistogram::update(Mat image) {
 	Mat hue_hist, light_hist, saturation_hist;
 
 	/// Compute the histograms:
-	calcHist(&bgr_planes[0], 1, 0, Mat(), hue_hist, 1, &histSize, &histRange,
+	calcHist(&hls_planes[0], 1, 0, Mat(), hue_hist, 1, &histSize, &histRange,
 			uniform, accumulate);
-	calcHist(&bgr_planes[1], 1, 0, Mat(), light_hist, 1, &histSize, &histRange,
+	calcHist(&hls_planes[1], 1, 0, Mat(), light_hist, 1, &histSize, &histRange,
 			uniform, accumulate);
-	calcHist(&bgr_planes[2], 1, 0, Mat(), saturation_hist, 1, &histSize, &histRange,
+	calcHist(&hls_planes[2], 1, 0, Mat(), saturation_hist, 1, &histSize, &histRange,
 			uniform, accumulate);
 
 	// Draw the histograms for B, G and R
