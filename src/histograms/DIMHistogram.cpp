@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <iostream>
 #include <set>
+#include <list>
 using namespace std;
 
 DIMHistogram::DIMHistogram() {
@@ -25,115 +26,197 @@ DIMHistogram::~DIMHistogram() {
 }
 
 
-class ColorData {
+class ColorCovering {
 public:
-	ColorData(int red, int green, int blue, int count) :
-		red(red), green(green), blue(blue), count(count) {
-
+	ColorCovering(uchar red, uchar green, uchar blue, int maxCoveringSize) :
+		red(red), green(green), blue(blue), wasCombined(0) {
+		covering.reserve(maxCoveringSize);
 	}
 
-	int getRed() {
+	uchar getRed() const {
 		return red;
 	}
 
-	int getGreen() {
+	uchar getGreen() const {
 		return green;
 	}
 
-	int getBlue() {
+	uchar getBlue() const {
 		return blue;
 	}
 
-	int getCount() const {
-		return count;
+	void combine(ColorCovering& other) {
+		for(int i = 0; i < other.covering.size(); i++) {
+			covering[i] = covering[i] + other.covering[i];
+		}
+		wasCombined++;
+	}
+
+	void addCoveringLevel() {
+		covering.push_back(wasCombined);
+		wasCombined = 0;
 	}
 
 private:
-	int red;
-	int green;
-	int blue;
-	int count;
+	uchar red;
+	uchar green;
+	uchar blue;
+	vector<int> covering;
+	int wasCombined;
 };
-bool operator< (const ColorData& lhs, const ColorData& rhs) {
-	return lhs.getCount() < lhs.getCount();
+bool operator< (const ColorCovering& lhs, const ColorCovering& rhs) {
+	if (lhs.getRed() < rhs.getRed()) {
+		return true;
+	} else if (lhs.getRed() > rhs.getRed()) {
+		return false;
+	}
+	if (lhs.getGreen() < rhs.getGreen()) {
+		return true;
+	} else if (lhs.getGreen() > rhs.getGreen()) {
+		return false;
+	}
+	return lhs.getBlue() < lhs.getBlue();
 }
 
-void DIMHistogram::update(Mat image) {
+bool operator== (const ColorCovering& lhs, const ColorCovering& rhs) {
+	return lhs.getRed() == rhs.getRed() &&
+		   lhs.getGreen() == rhs.getGreen() &&
+		   lhs.getBlue() == rhs.getBlue();
+}
 
-	int histSize[] = {256, 256, 256};
-	float hranges[] = {0.0, 255.0};
-	const float* ranges[] = {hranges, hranges, hranges};
-	int channels[] = {0, 1, 2};
 
 
-	Mat histogram;
-	    // Compute histogram
-	calcHist(&image,
-	        1, // histogram of 1 image only
-	        channels, // the channel used
-	        cv::Mat(), // no mask is used
-	        histogram, // the resulting histogram
-	        3, // it is a 3D histogram
-	        histSize, // number of bins
-	        ranges // pixel value range
-	        );
+class Area {
+public:
+	Area(int maxCoveringSize):
+		parent(0),
+		size(maxCoveringSize),
+		x(0),
+		y(0),
+		maxCoveringSize(maxCoveringSize) {
+		creatSubArea();
+	}
 
-	int colorsCount = 0;
-	set<ColorData> colors;
-	for (int c0 = 0; c0 < histogram.size[0]; c0++) {
-		for (int c1 = 0; c1 < histogram.size[1]; c1++) {
-			for (int c2 = 0; c2 < histogram.size[2]; c2++) {
-				int count = histogram.at<int>(c0, c1, c2);
-				if (count > 0) {
-					colors.insert(ColorData(c2, c1, c0, count));
+	void compute(Mat image) {
+		reset();
+		if (subArea == 0) {
+			Vec3b pixel = image.at<Vec3b>(y, x);
+			colorsCovering->insert(new ColorCovering(pixel[2], pixel[1], pixel[0], maxCoveringSize));
+		} else {
+			int i = 0;
+			do {
+				subArea->compute(image);
+				subColorsCovering.push_back(subArea->fetchColorCovering());
+				subArea->next();
+			} while((x != subArea->x) && (y != subArea->y));
+
+			while(true) {
+				set<ColorCovering*>* colorsCoveringWithMinColor = subColorsCovering[0];
+				for(int i = 1; i < subColorsCovering.size(); i++) {
+					if (colorsCoveringWithMinColor->empty()) {
+						colorsCoveringWithMinColor = subColorsCovering[i];
+						continue;
+					}
+					ColorCovering* minColorCovering = *(colorsCoveringWithMinColor->begin());
+
+					if (subColorsCovering[i]->empty()) {
+						continue;
+					}
+					ColorCovering* colorCovering = *(subColorsCovering[i]->begin());
+
+					if (*colorCovering < *minColorCovering) {
+						colorsCoveringWithMinColor = subColorsCovering[i];
+					} else if (*colorCovering == *minColorCovering) {
+						minColorCovering->combine(*colorCovering);
+						subColorsCovering[i]->erase(subColorsCovering[i]->begin());
+						delete colorCovering;
+					}
 				}
+				if (colorsCoveringWithMinColor->empty()) {
+					break;
+				}
+				ColorCovering* colorCovering = *(colorsCoveringWithMinColor->begin());
+				colorsCoveringWithMinColor->erase(colorsCoveringWithMinColor->begin());
+
+				colorCovering->addCoveringLevel();
+				colorsCovering->insert(colorCovering);
+			};
+
+			for(int i = 0; i < subColorsCovering.size(); i++) {
+				delete (subColorsCovering[i]);
 			}
+			subColorsCovering.clear();
 		}
 	}
 
-	ColorData topColor = *(colors.end());
-	cout<<"Top Color: "<<topColor.getRed()<<","<<topColor.getGreen()<<","<<topColor.getBlue()
-			<<"="<<topColor.getCount()<< endl;
+	set<ColorCovering*>* fetchColorCovering() {
+		set<ColorCovering*>* result = colorsCovering;
+		colorsCovering = 0;
+		return result;
+	}
+
+private:
+	Area(Area* parent, int maxCoveringSize, int size):
+		parent(parent),
+		size(size),
+		x(0),
+		y(0),
+		maxCoveringSize(maxCoveringSize){
+		creatSubArea();
+	}
+
+	void creatSubArea() {
+		if (size > 1) {
+			subArea = new Area(this, maxCoveringSize, size / 2);
+		}
+	}
+
+	Area* bottom() {
+		Area* bottom = this;
+		while(bottom->subArea != 0) {
+			bottom = bottom->subArea;
+		}
+		return bottom;
+	}
+
+	void reset() {
+		for(vector<set<ColorCovering*>*>::iterator it = subColorsCovering.begin();
+			it != subColorsCovering.end();
+			it++) {
+			set<ColorCovering*>* covering = *it;
+			delete covering;
+		}
+		subColorsCovering.clear();
+		colorsCovering = new set<ColorCovering*>();
+
+	}
+
+	void next() {
+		x += size;
+		if (x > parent->x + parent->size) {
+			x = parent->x;
+			y += size;
+		}
+		if (y > parent->y + parent->size) {
+			y = parent->y;
+		}
+	}
+
+private:
+	int x;
+	int y;
+	int maxCoveringSize;
+	int size;
+
+	Area* parent;
+	Area* subArea;
+	set<ColorCovering*>* colorsCovering;
+	vector<set<ColorCovering*>*> subColorsCovering;
+
+};
+
+void DIMHistogram::update(Mat image) {
+
+
 }
 
-/*void DIMHistogram::update(Mat image) {
- Range processedRegion(0, min(image.cols, image.rows));
- Mat rectangleImage = image(processedRegion, processedRegion);
- int sizes[] = { 256, 256, 256 };
- Mat histogram(3, sizes, CV_32SC1, cv::Scalar(0));
- bool index[3][256] = {{false}};
-
- int colorCount = 0;
- for(int row = 0; row < image.rows; row++) {
- for(int column = 0; column < image.cols; column++) {
- if (image.channels() == 3) {
- Vec3b pixel = image.at<Vec3b>(row, column);
- if (histogram.at<int>(pixel[0], pixel[1], pixel[2]) == 0) {
- colorCount++;
- }
- histogram.at<int>(pixel[0], pixel[1], pixel[2])++;
- index[0][pixel[0]] = true;
- index[1][pixel[1]] = true;
- index[2][pixel[2]] = true;
- }
- }
- }
-
-
- vector<int> colors;
- for(int blue = 0; blue < 256; blue++) {
- if (!index[0][blue]) continue;
- for(int green = 0; green < 256; green++) {
- if (!index[1][green]) continue;
- for(int red = 0; red < 256; red++) {
- if (!index[2][red]) continue;
- int count = histogram.at<int>(blue, green, red);
- if (count > 0) {
- //cout<<"["<<blue<<","<<green<<","<<red<<"] = "<<count<<endl;
- colors.push_back(count);
- }
- }
- }
- }
- cout<<"Colors Found: "<<colorCount<<endl;
- }*/
