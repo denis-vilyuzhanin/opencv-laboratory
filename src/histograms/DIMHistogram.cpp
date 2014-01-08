@@ -53,8 +53,12 @@ public:
 	}
 
 	void addCoveringLevel() {
-		covering.push_back(wasCombined);
+		covering.push_back(wasCombined + 1);
 		wasCombined = 0;
+	}
+
+	const vector<int>& getCovering() const {
+		return covering;
 	}
 
 private:
@@ -97,6 +101,10 @@ public:
 		creatSubArea();
 	}
 
+	~Area() {
+		delete subArea;
+	}
+
 	void compute(Mat image) {
 		reset();
 		if (subArea == 0) {
@@ -104,11 +112,11 @@ public:
 			colorsCovering->insert(new ColorCovering(pixel[2], pixel[1], pixel[0], maxCoveringSize));
 		} else {
 			int i = 0;
+			subArea->position(x, y);
 			do {
 				subArea->compute(image);
 				subColorsCovering.push_back(subArea->fetchColorCovering());
-				subArea->next();
-			} while((x != subArea->x) && (y != subArea->y));
+			} while(subArea->next());
 
 			while(true) {
 				set<ColorCovering*>* colorsCoveringWithMinColor = subColorsCovering[0];
@@ -168,6 +176,8 @@ private:
 	void creatSubArea() {
 		if (size > 1) {
 			subArea = new Area(this, maxCoveringSize, size / 2);
+		} else {
+			subArea = 0;
 		}
 	}
 
@@ -191,15 +201,23 @@ private:
 
 	}
 
-	void next() {
+	bool next() {
 		x += size;
-		if (x > parent->x + parent->size) {
-			x = parent->x;
-			y += size;
+		if (x < parent->x + parent->size) {
+			return true;
 		}
-		if (y > parent->y + parent->size) {
-			y = parent->y;
+		x = parent->x;
+		y += size;
+		if (y < parent->y + parent->size) {
+			return true;
 		}
+		y = parent->y;
+		return false;
+	}
+
+	void position(int x, int y) {
+		this->x = x;
+		this->y = y;
 	}
 
 private:
@@ -216,7 +234,25 @@ private:
 };
 
 void DIMHistogram::update(Mat image) {
+	int maxCoveringSize = min(image.cols, image.rows);
+	Area root(maxCoveringSize);
+	root.compute(image);
+	set<ColorCovering*>* colorsCovering = root.fetchColorCovering();
 
-
+	for(set<ColorCovering*>::iterator it = colorsCovering->begin();
+		it != colorsCovering->end();
+		it++) {
+		ColorCovering* covering = *(it);
+		cout<<"["<<(int)covering->getRed()
+			<<","<<(int)covering->getGreen()
+			<<","<<(int)covering->getBlue()
+			<<"]";
+		cout<<": ";
+		const vector<int> values = covering->getCovering();
+		for(int i = 0; i < values.size(); i++) {
+			cout<<values[i]<<" ";
+		}
+		cout<<endl;
+	}
 }
 
