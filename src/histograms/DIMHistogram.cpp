@@ -25,11 +25,10 @@ DIMHistogram::~DIMHistogram() {
 
 }
 
-
 class ColorCovering {
 public:
 	ColorCovering(uchar red, uchar green, uchar blue, int maxCoveringSize) :
-		red(red), green(green), blue(blue), wasCombined(0) {
+			red(red), green(green), blue(blue), wasCombined(0) {
 		covering.reserve(maxCoveringSize);
 	}
 
@@ -46,7 +45,7 @@ public:
 	}
 
 	void combine(ColorCovering& other) {
-		for(int i = 0; i < other.covering.size(); i++) {
+		for (int i = 0; i < other.covering.size(); i++) {
 			covering[i] = covering[i] + other.covering[i];
 		}
 		wasCombined++;
@@ -68,7 +67,7 @@ private:
 	vector<int> covering;
 	int wasCombined;
 };
-bool operator< (const ColorCovering& lhs, const ColorCovering& rhs) {
+bool operator<(const ColorCovering& lhs, const ColorCovering& rhs) {
 	if (lhs.getRed() < rhs.getRed()) {
 		return true;
 	} else if (lhs.getRed() > rhs.getRed()) {
@@ -82,22 +81,16 @@ bool operator< (const ColorCovering& lhs, const ColorCovering& rhs) {
 	return lhs.getBlue() < lhs.getBlue();
 }
 
-bool operator== (const ColorCovering& lhs, const ColorCovering& rhs) {
-	return lhs.getRed() == rhs.getRed() &&
-		   lhs.getGreen() == rhs.getGreen() &&
-		   lhs.getBlue() == rhs.getBlue();
+bool operator==(const ColorCovering& lhs, const ColorCovering& rhs) {
+	return lhs.getRed() == rhs.getRed() && lhs.getGreen() == rhs.getGreen()
+			&& lhs.getBlue() == rhs.getBlue();
 }
-
-
 
 class Area {
 public:
-	Area(int maxCoveringSize):
-		parent(0),
-		size(maxCoveringSize),
-		x(0),
-		y(0),
-		maxCoveringSize(maxCoveringSize) {
+	Area(int maxCoveringSize) :
+			parent(0), size(maxCoveringSize), x(0), y(0), maxCoveringSize(
+					maxCoveringSize) {
 		creatSubArea();
 	}
 
@@ -109,48 +102,56 @@ public:
 		reset();
 		if (subArea == 0) {
 			Vec3b pixel = image.at<Vec3b>(y, x);
-			colorsCovering->insert(new ColorCovering(pixel[2], pixel[1], pixel[0], maxCoveringSize));
+			colorsCovering->insert(
+					new ColorCovering(pixel[2], pixel[1], pixel[0],
+							maxCoveringSize));
 		} else {
 			int i = 0;
 			subArea->position(x, y);
 			do {
 				subArea->compute(image);
 				subColorsCovering.push_back(subArea->fetchColorCovering());
-			} while(subArea->next());
+			} while (subArea->next());
 
-			while(true) {
-				set<ColorCovering*>* colorsCoveringWithMinColor = subColorsCovering[0];
-				for(int i = 1; i < subColorsCovering.size(); i++) {
+			while (true) {
+				set<ColorCovering*>* colorsCoveringWithMinColor =
+						subColorsCovering[0];
+				for (int i = 1; i < subColorsCovering.size(); i++) {
 					if (colorsCoveringWithMinColor->empty()) {
 						colorsCoveringWithMinColor = subColorsCovering[i];
 						continue;
 					}
-					ColorCovering* minColorCovering = *(colorsCoveringWithMinColor->begin());
+					ColorCovering* minColorCovering =
+							*(colorsCoveringWithMinColor->begin());
 
 					if (subColorsCovering[i]->empty()) {
 						continue;
 					}
-					ColorCovering* colorCovering = *(subColorsCovering[i]->begin());
+					ColorCovering* colorCovering =
+							*(subColorsCovering[i]->begin());
 
 					if (*colorCovering < *minColorCovering) {
 						colorsCoveringWithMinColor = subColorsCovering[i];
 					} else if (*colorCovering == *minColorCovering) {
 						minColorCovering->combine(*colorCovering);
-						subColorsCovering[i]->erase(subColorsCovering[i]->begin());
+						subColorsCovering[i]->erase(
+								subColorsCovering[i]->begin());
 						delete colorCovering;
 					}
 				}
 				if (colorsCoveringWithMinColor->empty()) {
 					break;
 				}
-				ColorCovering* colorCovering = *(colorsCoveringWithMinColor->begin());
-				colorsCoveringWithMinColor->erase(colorsCoveringWithMinColor->begin());
+				ColorCovering* colorCovering =
+						*(colorsCoveringWithMinColor->begin());
+				colorsCoveringWithMinColor->erase(
+						colorsCoveringWithMinColor->begin());
 
 				colorCovering->addCoveringLevel();
 				colorsCovering->insert(colorCovering);
 			};
 
-			for(int i = 0; i < subColorsCovering.size(); i++) {
+			for (int i = 0; i < subColorsCovering.size(); i++) {
 				delete (subColorsCovering[i]);
 			}
 			subColorsCovering.clear();
@@ -164,12 +165,9 @@ public:
 	}
 
 private:
-	Area(Area* parent, int maxCoveringSize, int size):
-		parent(parent),
-		size(size),
-		x(0),
-		y(0),
-		maxCoveringSize(maxCoveringSize){
+	Area(Area* parent, int maxCoveringSize, int size) :
+			parent(parent), size(size), x(0), y(0), maxCoveringSize(
+					maxCoveringSize) {
 		creatSubArea();
 	}
 
@@ -183,16 +181,16 @@ private:
 
 	Area* bottom() {
 		Area* bottom = this;
-		while(bottom->subArea != 0) {
+		while (bottom->subArea != 0) {
 			bottom = bottom->subArea;
 		}
 		return bottom;
 	}
 
 	void reset() {
-		for(vector<set<ColorCovering*>*>::iterator it = subColorsCovering.begin();
-			it != subColorsCovering.end();
-			it++) {
+		for (vector<set<ColorCovering*>*>::iterator it =
+				subColorsCovering.begin(); it != subColorsCovering.end();
+				it++) {
 			set<ColorCovering*>* covering = *it;
 			delete covering;
 		}
@@ -239,20 +237,41 @@ void DIMHistogram::update(Mat image) {
 	root.compute(image);
 	set<ColorCovering*>* colorsCovering = root.fetchColorCovering();
 
-	for(set<ColorCovering*>::iterator it = colorsCovering->begin();
-		it != colorsCovering->end();
-		it++) {
+	int hist_w = 512;
+	int hist_h = 400;
+
+	int bin_w = cvRound((double) hist_w / maxCoveringSize);
+	int bin_h = cvRound((double) hist_h / colorsCovering->size());
+	int step = 1;
+	Mat histImage(hist_h, hist_w, CV_8UC3, Scalar(0, 0, 0));
+
+	for (set<ColorCovering*>::iterator it = colorsCovering->begin();
+			it != colorsCovering->end(); it++) {
 		ColorCovering* covering = *(it);
-		cout<<"["<<(int)covering->getRed()
-			<<","<<(int)covering->getGreen()
-			<<","<<(int)covering->getBlue()
-			<<"]";
-		cout<<": ";
 		const vector<int> values = covering->getCovering();
-		for(int i = 0; i < values.size(); i++) {
-			cout<<values[i]<<" ";
+
+		int max = values[0];
+		int prevH = hist_h;
+		for (int i = 1; i < values.size(); i++) {
+			int h = cvRound(hist_h * (double)values[i] / max);
+			line(histImage,
+				 Point(bin_w * (i - 1), prevH),
+				 Point(bin_w * i, h),
+				 Scalar(covering->getRed(), covering->getGreen(), covering->getBlue()),
+				 2, 8, 0
+				 );
+			prevH  = h;
 		}
-		cout<<endl;
+
+		namedWindow("DIM Histogram", CV_WINDOW_AUTOSIZE);
+		imshow("DIM Histogram", histImage);
+
 	}
+
+	for (set<ColorCovering*>::iterator it = colorsCovering->begin();
+			it != colorsCovering->end(); it++) {
+		delete *(it);
+	}
+	delete colorsCovering;
 }
 
