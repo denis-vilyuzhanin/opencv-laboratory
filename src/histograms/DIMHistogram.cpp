@@ -13,6 +13,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <set>
 using namespace std;
 
 DIMHistogram::DIMHistogram() {
@@ -23,6 +24,40 @@ DIMHistogram::~DIMHistogram() {
 
 }
 
+
+class ColorData {
+public:
+	ColorData(int red, int green, int blue, int count) :
+		red(red), green(green), blue(blue), count(count) {
+
+	}
+
+	int getRed() {
+		return red;
+	}
+
+	int getGreen() {
+		return green;
+	}
+
+	int getBlue() {
+		return blue;
+	}
+
+	int getCount() const {
+		return count;
+	}
+
+private:
+	int red;
+	int green;
+	int blue;
+	int count;
+};
+bool operator< (const ColorData& lhs, const ColorData& rhs) {
+	return lhs.getCount() < lhs.getCount();
+}
+
 void DIMHistogram::update(Mat image) {
 
 	int histSize[] = {256, 256, 256};
@@ -31,7 +66,7 @@ void DIMHistogram::update(Mat image) {
 	int channels[] = {0, 1, 2};
 
 
-	MatND histogram;
+	Mat histogram;
 	    // Compute histogram
 	calcHist(&image,
 	        1, // histogram of 1 image only
@@ -44,18 +79,21 @@ void DIMHistogram::update(Mat image) {
 	        );
 
 	int colorsCount = 0;
+	set<ColorData> colors;
 	for (int c0 = 0; c0 < histogram.size[0]; c0++) {
 		for (int c1 = 0; c1 < histogram.size[1]; c1++) {
 			for (int c2 = 0; c2 < histogram.size[2]; c2++) {
 				int count = histogram.at<int>(c0, c1, c2);
 				if (count > 0) {
-					colorsCount++;
+					colors.insert(ColorData(c2, c1, c0, count));
 				}
 			}
 		}
 	}
 
-	cout<<"Colors: "<<colorsCount<<endl;
+	ColorData topColor = *(colors.end());
+	cout<<"Top Color: "<<topColor.getRed()<<","<<topColor.getGreen()<<","<<topColor.getBlue()
+			<<"="<<topColor.getCount()<< endl;
 }
 
 /*void DIMHistogram::update(Mat image) {
