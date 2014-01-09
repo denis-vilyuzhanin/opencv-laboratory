@@ -15,6 +15,7 @@
 #include <iostream>
 #include <set>
 #include <list>
+#include <math.h> 
 using namespace std;
 
 DIMHistogram::DIMHistogram() {
@@ -284,13 +285,15 @@ void DIMHistogram::update(Mat image) {
 	set<ColorCoveringHolder>* colorsCovering = root.fetchColorCovering();
 
 	int hist_w = 512;
-	int hist_h = 400;
+	int hist_h = 100;
 	int border = 20;
-	int bin_w = cvRound((double) hist_w / maxCoveringSize);
+	double range = log10((double)maxCoveringSize) / log10((double)2);
+	int bin_w = cvRound((double) hist_w / range);
 	int bin_h = cvRound((double) (hist_h - border) / colorsCovering->size());
 	int step = 1;
-	Mat histImage(hist_h, hist_w, CV_8UC3, Scalar(0, 0, 0));
+	Mat histImage(hist_h * colorsCovering->size(), hist_w, CV_8UC3, Scalar(0, 0, 0));
 
+	int n = 1;
 	for (set<ColorCoveringHolder>::iterator it = colorsCovering->begin();
 			it != colorsCovering->end(); it++) {
 		ColorCovering* covering = *(it);
@@ -301,17 +304,18 @@ void DIMHistogram::update(Mat image) {
 		for (int i = 1; i < values.size(); i++) {
 			int h = cvRound((hist_h - border) * (double)values[i] / max);
 			line(histImage,
-				 Point(bin_w * (i - 1), hist_h - prevH),
-				 Point(bin_w * i, hist_h - h),
+				 Point(bin_w * (i - 1), hist_h * n - prevH),
+				 Point(bin_w * i, hist_h * n - h),
 				 Scalar(covering->getRed(), covering->getGreen(), covering->getBlue()),
 				 2, 8, 0
 				 );
 			prevH  = h;
 		}
-
+		n++;
+		 
 		namedWindow("DIM Histogram", CV_WINDOW_AUTOSIZE);
 		imshow("DIM Histogram", histImage);
-
+		 
 	}
 
 	for (set<ColorCoveringHolder>::iterator it = colorsCovering->begin();

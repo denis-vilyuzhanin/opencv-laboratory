@@ -16,7 +16,7 @@ using namespace cv;
 int main(int argc, char** argv) {
 	Application application;
 
-	if (argc == 2) {
+	if (argc >= 2) {
 		string imagefile = argv[1];
 		application.getImageView().changeImageSource(new FileImageSource(imagefile));
 	}
