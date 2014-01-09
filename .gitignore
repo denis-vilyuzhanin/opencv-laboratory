@@ -15,3 +15,6 @@
 #Eclipse project files
 .project
 .cproject
+nbproject
+CMakeFiles/
+CMakeCache.txt

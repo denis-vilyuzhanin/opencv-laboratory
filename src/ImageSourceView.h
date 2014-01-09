@@ -8,9 +8,13 @@
 #ifndef IMAGESOURCEVIEW_H_
 #define IMAGESOURCEVIEW_H_
 
+#include <string>
+using namespace std;
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 using namespace cv;
+
 
 #include "ImageSource.h"
 
