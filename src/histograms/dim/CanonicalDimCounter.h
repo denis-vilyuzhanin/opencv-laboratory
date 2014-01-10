@@ -27,8 +27,6 @@ public:
     
     virtual ~CanonicalDimCounter();
     
-    void process();
-    
     int compute();
     
 private:

@@ -13,7 +13,7 @@ CanonicalDimCounter::~CanonicalDimCounter() {
 }
 
 
-int CanonicalDimCounter::process() {
+int CanonicalDimCounter::compute() {
     int count = 0;
     for(int y = 0; y < image.cols; y++) {
         for(int x = 0; x < image.rows; x++) {
@@ -22,25 +22,12 @@ int CanonicalDimCounter::process() {
                 int xx = x / diameter;
                 int yy = y / diameter;
                 if (flags.at<uchar>(yy, xx) == 0)
-                    count++
+                    count++;
                 
                 flags.at<uchar>(yy, xx) = 1;
             }
         }
     }
     return count;
-}
-    
-int CanonicalDimCounter::compute() {
-    int counter = 0;
-    for(int y = 0; y < flags.cols; y++) {
-        for(int x = 0; x < flags.rows; x++) {
-            uchar flag = flags.at<uchar>(y, x);
-            if (flag == runCounter) {
-                counter++;
-            }
-        }
-    }
-    return counter;
 }
 
