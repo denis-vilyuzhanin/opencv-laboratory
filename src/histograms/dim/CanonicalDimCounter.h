@@ -20,8 +20,8 @@ public:
     color(color),
     diameter(diameter),
     image(image),
-    flags(image.rows / diameter, image.cols / diameter, CV_8UC1, Scalar(0, 0, 0)),
-    runCounter(0){
+    flags(image.rows / diameter, image.cols / diameter, CV_8UC1, Scalar(0, 0, 0))
+    {
         
     };
     
@@ -30,14 +30,12 @@ public:
     void process();
     
     int compute();
-private:
-    void newRun();
+    
 private:
     Vec3b color;
     int diameter;
     Mat image;
     Mat flags;
-    int runCounter;
 };
 
 #endif	/* CANONICALDIMCOUNTER_H */

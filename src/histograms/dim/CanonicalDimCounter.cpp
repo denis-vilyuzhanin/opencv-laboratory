@@ -13,18 +13,22 @@ CanonicalDimCounter::~CanonicalDimCounter() {
 }
 
 
-void CanonicalDimCounter::process() {
-    newRun();
+int CanonicalDimCounter::process() {
+    int count = 0;
     for(int y = 0; y < image.cols; y++) {
         for(int x = 0; x < image.rows; x++) {
             Vec3b actualColor = image.at<Vec3b>(y, x);
             if (color == actualColor) {
                 int xx = x / diameter;
                 int yy = y / diameter;
-                flags.at<uchar>(yy, xx) = runCounter;
+                if (flags.at<uchar>(yy, xx) == 0)
+                    count++
+                
+                flags.at<uchar>(yy, xx) = 1;
             }
         }
     }
+    return count;
 }
     
 int CanonicalDimCounter::compute() {
@@ -40,11 +44,3 @@ int CanonicalDimCounter::compute() {
     return counter;
 }
 
-
-void CanonicalDimCounter::newRun() {
-    runCounter++;
-    if (runCounter == 255) {
-        runCounter = 1;
-        flags.zeros(flags.rows, flags.cols, CV_8U);
-    }
-}
