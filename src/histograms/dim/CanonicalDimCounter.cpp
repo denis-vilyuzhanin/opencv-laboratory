@@ -7,7 +7,7 @@
 
 #include "CanonicalDimCounter.h"
 
-
+#include "math.h"
 
 
 
@@ -18,7 +18,11 @@ CanonicalDimCounter::CanonicalDimCounter(const Vec3b& color,
         maxDiameter(maxDiameter),
         image(image),
         flags(image.rows, image.cols, CV_8UC1, Scalar(0, 0, 0)),
-        counts(maxDiameter, 0) {
+        counts(maxDiameter, 0),
+        minX(image.cols),
+        minY(image.rows),
+        maxX(-1),
+        maxY(-1){
     
 }
 
@@ -38,12 +42,23 @@ void CanonicalDimCounter::compute() {
                     int yy = y / diameter;
                     if (flags.at<uchar>(yy, xx) != diameter) {
                     	counts[diameter - 1]++;
+
+                    	minX = min(minX, x);
+                    	minY = min(minY, y);
+                    	maxX = max(maxX, x);
+                    	maxY = max(maxY, y);
                     }
                     flags.at<uchar>(yy, xx) = diameter;
                 }
+
+
             }
         }
     }
     
 }
 
+
+int CanonicalDimCounter::volume() const {
+	return (maxX - minX) * (maxY - minY);
+}

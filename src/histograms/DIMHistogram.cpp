@@ -36,25 +36,39 @@ void DIMHistogram::update(Mat image) {
 	counter.compute();
 
 	int hist_w = 512;
-	int hist_h = 100;
-	int border = 20;
+	int hist_h = 500;
+	int border = 5;
 	double range = log10((double) MAX_DIAMETER) / log10((double) 2);
 	int bin_w = cvRound((double) hist_w / range);
 	int bin_h = cvRound((double) (hist_h - border) / counter.getCount().size());
 	int step = 1;
-	Mat histImage(hist_h * counter.getCount().size(), hist_w, CV_8UC3,
+	Mat histImage(hist_h , hist_w, CV_8UC3,
 			Scalar(0, 0, 0));
 
 	
 
-	int max = counter.getCount()[0];
-	int prevH = hist_h - border;
-	for (int i = 1; i < counter.getCount().size(); i++) {
+	int max = counter.volume();
+	int prevH = 0;
+	for (int i = 0; i < counter.getCount().size(); i++) {
+
 		int h = cvRound((hist_h - border) * (double) counter.getCount()[i] / max);
-		line(histImage, Point(bin_w * (i - 1), hist_h  - prevH),
-				Point(bin_w * i, hist_h  - h),
-				Scalar(white[2], white[1], white[0]), 2, 8, 0);
+		
+		if (i > 0) {
+			line(histImage, Point(bin_w * (i - 1), hist_h  - prevH),
+					Point(bin_w * i, hist_h  - h),
+					Scalar(white[2], white[1], white[0]), 4, 8, 0);
+
+			int prevUpperBound =
+					cvRound((hist_h - border) * (double) (max/(i*i)) / max);
+			int upperBound =
+				cvRound((hist_h - border) * (double) (max/((i+1)*(i+1))) / max);
+
+			line(histImage, Point(bin_w * (i - 1), hist_h  - prevUpperBound),
+							Point(bin_w * i, hist_h  - upperBound),
+								Scalar(white[2], white[1], white[0]), 1, 8, 0);
+		}
 		prevH = h;
+		
 	}
 	
 

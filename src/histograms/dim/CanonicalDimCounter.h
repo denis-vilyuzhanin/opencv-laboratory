@@ -22,15 +22,38 @@ public:
     
     void compute();
     
+    int volume() const;
+
     const vector<int>& getCount() const {
     	return counts;
     }
+
+    int getMinY() const  {
+    	return minY;
+    }
+
+    int getMinX() const {
+    	return minX;
+    }
+
+    int getMaxX() const {
+    	return maxX;
+    }
+
+    int getMaxY() const {
+    	return maxY;
+    }
+
 private:
     Vec3b color;
     vector<int> counts;
     int maxDiameter;
     Mat image;
     Mat flags;
+    int minY;
+    int minX;
+    int maxX;
+    int maxY;
 };
 
 #endif	/* CANONICALDIMCOUNTER_H */
