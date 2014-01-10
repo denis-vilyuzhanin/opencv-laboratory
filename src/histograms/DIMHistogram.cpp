@@ -32,8 +32,8 @@ void DIMHistogram::update(Mat image) {
     Vec3b white;
     white[0] = white[1] = white[2] = 255;
     CanonicalDimCounter counter(white, 1, image);
-    int whiteCount = counter.compute();
-    cout<<"White: "<<whiteCount<<endl;
+    counter.compute();
+    
     
     /*int hist_w = 512;
 	int hist_h = 100;
