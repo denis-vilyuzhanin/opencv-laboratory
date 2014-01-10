@@ -22,6 +22,9 @@ public:
     
     void compute();
     
+    const vector<int>& getCount() const {
+    	return counts;
+    }
 private:
     Vec3b color;
     vector<int> counts;

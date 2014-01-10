@@ -29,51 +29,37 @@ DIMHistogram::~DIMHistogram() {
 
 void DIMHistogram::update(Mat image) {
 
-    Vec3b white;
-    white[0] = white[1] = white[2] = 255;
-    CanonicalDimCounter counter(white, 1, image);
-    counter.compute();
-    
-    
-    /*int hist_w = 512;
+	const int MAX_DIAMETER = min(image.rows, image.cols);
+	Vec3b white;
+	white[0] = white[1] = white[2] = 255;
+	CanonicalDimCounter counter(white, MAX_DIAMETER, image);
+	counter.compute();
+
+	int hist_w = 512;
 	int hist_h = 100;
 	int border = 20;
-	double range = log10((double)maxCoveringSize) / log10((double)2);
+	double range = log10((double) MAX_DIAMETER) / log10((double) 2);
 	int bin_w = cvRound((double) hist_w / range);
-	int bin_h = cvRound((double) (hist_h - border) / colorsCovering->size());
+	int bin_h = cvRound((double) (hist_h - border) / counter.getCount().size());
 	int step = 1;
-	Mat histImage(hist_h * colorsCovering->size(), hist_w, CV_8UC3, Scalar(0, 0, 0));
+	Mat histImage(hist_h * counter.getCount().size(), hist_w, CV_8UC3,
+			Scalar(0, 0, 0));
 
-	int n = 1;
-	for (set<ColorCoveringHolder>::iterator it = colorsCovering->begin();
-			it != colorsCovering->end(); it++) {
-		ColorCovering* covering = *(it);
-		const vector<int> values = covering->getCovering();
+	
 
-		int max = values[0];
-		int prevH = hist_h - border;
-		for (int i = 1; i < values.size(); i++) {
-			int h = cvRound((hist_h - border) * (double)values[i] / max);
-			line(histImage,
-				 Point(bin_w * (i - 1), hist_h * n - prevH),
-				 Point(bin_w * i, hist_h * n - h),
-				 Scalar(covering->getRed(), covering->getGreen(), covering->getBlue()),
-				 2, 8, 0
-				 );
-			prevH  = h;
-		}
-		n++;
-		 
-		namedWindow("DIM Histogram", CV_WINDOW_AUTOSIZE);
-		imshow("DIM Histogram", histImage);
-		 
+	int max = counter.getCount()[0];
+	int prevH = hist_h - border;
+	for (int i = 1; i < counter.getCount().size(); i++) {
+		int h = cvRound((hist_h - border) * (double) counter.getCount()[i] / max);
+		line(histImage, Point(bin_w * (i - 1), hist_h  - prevH),
+				Point(bin_w * i, hist_h  - h),
+				Scalar(white[2], white[1], white[0]), 2, 8, 0);
+		prevH = h;
 	}
+	
 
-	for (set<ColorCoveringHolder>::iterator it = colorsCovering->begin();
-			it != colorsCovering->end(); it++) {
-		ColorCoveringHolder covering = *(it);
-		covering.release();
-	}
-	delete colorsCovering;*/
+	namedWindow("DIM Histogram", CV_WINDOW_AUTOSIZE);
+	imshow("DIM Histogram", histImage);
+
 }
 

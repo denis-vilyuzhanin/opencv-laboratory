@@ -9,7 +9,7 @@
 #define MAINMENU_H_
 
 #include <map>
-
+#include <string>
 using namespace std;
 
 class MainMenu {
