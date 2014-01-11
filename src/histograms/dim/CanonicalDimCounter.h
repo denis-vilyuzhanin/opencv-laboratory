@@ -24,6 +24,12 @@ public:
     
     int volume() const;
 
+    int width() const;
+
+    int height() const;
+
+    float diagonal() const;
+
     const vector<int>& getCount() const {
     	return counts;
     }

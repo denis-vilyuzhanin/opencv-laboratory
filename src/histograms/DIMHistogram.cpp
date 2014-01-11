@@ -48,6 +48,7 @@ void DIMHistogram::update(Mat image) {
 	
 
 	int max = counter.volume();
+	float diagonal = counter.diagonal();
 	int prevH = 0;
 	for (int i = 0; i < counter.getCount().size(); i++) {
 
@@ -66,6 +67,16 @@ void DIMHistogram::update(Mat image) {
 			line(histImage, Point(bin_w * (i - 1), hist_h  - prevUpperBound),
 							Point(bin_w * i, hist_h  - upperBound),
 								Scalar(white[2], white[1], white[0]), 1, 8, 0);
+
+			int prevLowerBound =
+					cvRound((hist_h - border) * (double) (diagonal/i / max));
+
+			int lowerBound =
+					cvRound((hist_h - border) * (double) (diagonal/(i+1) / max));
+
+			line(histImage, Point(bin_w * (i - 1), hist_h  - prevLowerBound),
+										Point(bin_w * i, hist_h  - lowerBound),
+											Scalar(white[2], white[1], white[0]), 1, 8, 0);
 		}
 		prevH = h;
 		

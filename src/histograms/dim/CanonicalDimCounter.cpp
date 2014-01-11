@@ -60,5 +60,19 @@ void CanonicalDimCounter::compute() {
 
 
 int CanonicalDimCounter::volume() const {
-	return (maxX - minX) * (maxY - minY);
+	return width() * height();
+}
+
+int CanonicalDimCounter::width() const {
+	return maxX - minY;
+}
+
+int CanonicalDimCounter::height() const {
+	return maxY - minY;
+}
+
+float CanonicalDimCounter::diagonal() const {
+	int w = width();
+	int h = height();
+	return sqrt(double(w*w + h*h));
 }
