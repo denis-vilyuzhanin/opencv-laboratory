@@ -50,14 +50,23 @@ void DIMHistogram::update(Mat image) {
 	int max = counter.volume();
 	float diagonal = counter.diagonal();
 	int prevH = 0;
+	double prevDim;
+
+	int md = MAX(counter.width(), counter.height());
 	for (int i = 0; i < counter.getCount().size(); i++) {
 
+		double dim = log(double(counter.getCount()[i])) / log(md / double(i + 1));
+				
 		int h = cvRound((hist_h - border) * (double) counter.getCount()[i] / max);
 		
 		if (i > 0) {
 			line(histImage, Point(bin_w * (i - 1), hist_h  - prevH),
 					Point(bin_w * i, hist_h  - h),
 					Scalar(white[2], white[1], white[0]), 4, 8, 0);
+
+			line(histImage, Point(bin_w * (i - 1), hist_h  - (hist_h/prevDim)),
+								Point(bin_w * i, hist_h  - (hist_h/dim)),
+								Scalar(white[2], white[1], white[0]), 1, 8, 0);
 
 			int prevUpperBound =
 					cvRound((hist_h - border) * (double) (max/(i*i)) / max);
@@ -68,7 +77,8 @@ void DIMHistogram::update(Mat image) {
 							Point(bin_w * i, hist_h  - upperBound),
 								Scalar(white[2], white[1], white[0]), 1, 8, 0);
 
-			int prevLowerBound =
+
+			/*int prevLowerBound =
 					cvRound((hist_h - border) * (double) (diagonal/i / max));
 
 			int lowerBound =
@@ -77,12 +87,15 @@ void DIMHistogram::update(Mat image) {
 			line(histImage, Point(bin_w * (i - 1), hist_h  - prevLowerBound),
 										Point(bin_w * i, hist_h  - lowerBound),
 											Scalar(white[2], white[1], white[0]), 1, 8, 0);
+											*/
+
+
 		}
 		prevH = h;
-		
+		prevDim = dim;
 	}
 	
-
+	cout<<endl;
 	namedWindow("DIM Histogram", CV_WINDOW_AUTOSIZE);
 	imshow("DIM Histogram", histImage);
 
