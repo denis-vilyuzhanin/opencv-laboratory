@@ -18,7 +18,7 @@ public:
 	Histogram();
 	virtual ~Histogram();
 
-	virtual void update(Mat image) = 0;
+
 };
 
 #endif /* HISTOGRAM_H_ */

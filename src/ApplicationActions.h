@@ -18,6 +18,8 @@ using namespace std;
 #include "histograms/HSLHistogram.h"
 #include "histograms/DIMHistogram.h"
 
+#include "edge/SobelEdgeDetector.h"
+
 class ApplicationActions {
 public:
 
@@ -89,9 +91,10 @@ public:
 		}
 
 		void handle() {
-			cout << endl << "Available Histograms: ";
+			cout << endl << "Available Histograms: "<< endl;
 			cout << "\t[rgb] " << "RGB historgam" << endl;
 			cout << "\t[hsl] " << "RGB historgam" << endl;
+			cout << "\t[dim] " << "DIM historgam" << endl;
 			cout << endl << "Please select histogram from list above: ";
 			string type;
 			getline(cin, type);
@@ -110,6 +113,30 @@ public:
 				application.addPerspective(histogram);
 			}
 		}
+	};
+
+	class AddEdgeDetectorAction: public ApplicationAction {
+	public:
+		AddEdgeDetectorAction(Application& app) :
+				ApplicationAction(app) {
+			key = 'e';
+			displayKey = 'e';
+			description = "Add Edge Detector";
+		}
+
+		void handle() {
+			cout << endl << "Available Edge Detectors: " <<endl;
+			cout << "\t[sobel] " << "Sobel Derivatives" << endl;
+			cout << endl << "Please select detector type from list above: ";
+			string type;
+			getline(cin, type);
+
+
+			if (type == "sobel") {
+				application.addPerspective(new SobelEdgeDetector());
+			}
+		}
+
 	};
 };
 

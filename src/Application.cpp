@@ -29,6 +29,7 @@ Application::Application() :
 	mainMenu.addAction(new ApplicationActions::ShowMainMenuAction(*this));
 	mainMenu.addAction(new ApplicationActions::OpenFile(*this));
 	mainMenu.addAction(new ApplicationActions::AddHistogramAction(*this));
+	mainMenu.addAction(new ApplicationActions::AddEdgeDetectorAction(*this));
 }
 
 Application::~Application() {
