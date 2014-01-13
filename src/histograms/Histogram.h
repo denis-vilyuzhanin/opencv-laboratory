@@ -11,8 +11,9 @@
 #include <opencv2/core/core.hpp>
 using namespace cv;
 
+#include "../Perspective.h"
 
-class Histogram {
+class Histogram: public Perspective {
 public:
 	Histogram();
 	virtual ~Histogram();

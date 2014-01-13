@@ -107,7 +107,7 @@ public:
 			}
 
 			if (histogram != 0) {
-				application.addHistogram(histogram);
+				application.addPerspective(histogram);
 			}
 		}
 	};

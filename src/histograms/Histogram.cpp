@@ -7,7 +7,7 @@
 
 #include "Histogram.h"
 
-Histogram::Histogram() {
+Histogram::Histogram(): Perspective() {
 	// TODO Auto-generated constructor stub
 
 }

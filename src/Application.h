@@ -36,15 +36,15 @@ public:
 		return imageView;
 	}
 
-	void addHistogram(Histogram*);
-	void refreshHistograms();
+	void addPerspective(Perspective*);
+	void refreshPerspectives();
 
 private:
 	Mat sourceImage;
 	MainMenu mainMenu;
 	bool isClosed;
 	ImageSourceView imageView;
-	vector<Histogram*> histograms;
+	vector<Perspective*> perspectives;
 };
 
 #endif /* APPLICATION_H_ */

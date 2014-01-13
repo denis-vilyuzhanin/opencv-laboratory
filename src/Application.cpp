@@ -43,7 +43,7 @@ int Application::run() {
 		       // Show our image inside it.
 		showMainMenu();
 		imageView.paint();
-		refreshHistograms();
+		refreshPerspectives();
 		MainMenu::Action& nextAction = mainMenu.waitAction();
 		nextAction.handle();
 	}
@@ -59,15 +59,15 @@ void Application::close() {
 	isClosed = true;
 }
 
-void Application::addHistogram(Histogram* newHistogram) {
-	histograms.push_back(newHistogram);
+void Application::addPerspective(Perspective* newPerspective) {
+	perspectives.push_back(newPerspective);
 }
 
-void  Application::refreshHistograms() {
-	for (std::vector<Histogram*>::iterator it = histograms.begin() ;
-		 it != histograms.end();
+void  Application::refreshPerspectives() {
+	for (std::vector<Perspective*>::iterator it = perspectives.begin() ;
+		 it != perspectives.end();
 		 ++it){
-		Histogram* next = *it;
+		Perspective* next = *it;
 		next->update(imageView.getImage());
 	}
 }
