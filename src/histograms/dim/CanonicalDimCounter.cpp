@@ -34,8 +34,8 @@ CanonicalDimCounter::~CanonicalDimCounter() {
 void CanonicalDimCounter::compute() {
     for(int diameter = 1; diameter <= maxDiameter; diameter++) {
     	counts[diameter - 1] = 0;
-        for(int y = 0; y < image.cols; y++) {
-            for(int x = 0; x < image.rows; x++) {
+        for(int y = 0; y < image.rows; y++) {
+            for(int x = 0; x < image.cols; x++) {
                 Vec3b actualColor = image.at<Vec3b>(y, x);
                 if (color == actualColor) {
                     int xx = x / diameter;
