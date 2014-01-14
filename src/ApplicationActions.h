@@ -96,6 +96,7 @@ public:
 			cout << "\t[rgb] " << "RGB historgam" << endl;
 			cout << "\t[hsl] " << "RGB historgam" << endl;
 			cout << "\t[dim] " << "DIM historgam" << endl;
+			cout << "\t[fdim] " << "FastDIM historgam" << endl;
 			cout << endl << "Please select histogram from list above: ";
 			string type;
 			getline(cin, type);
@@ -108,7 +109,7 @@ public:
 				histogram = new HSLHistogram();
 			} else if (type == "dim") {
 				histogram = new DIMHistogram();
-			} else if (type == "fastDIM") {
+			} else if (type == "fdim") {
 				histogram = new FastDIMHistogram();
 			}
 

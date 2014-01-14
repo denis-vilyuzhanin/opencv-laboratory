@@ -35,8 +35,9 @@ static double dim(int n, int size) {
 
 cv::Vec3d FastDimCounter::compute(const cv::Mat& image) {
 	assertImage(image);
-	for (int x = 0; x < size; x++) {
-		for (int y = 0; y < size; y++) {
+	counter->reset();
+	for (int x = 0; x < size && x < image.cols; x++) {
+		for (int y = 0; y < size && y < image.rows; y++) {
 			const cv::Vec3b& value = getValue(image, x, y);
 			counter->increment(value);
 		}
@@ -60,6 +61,10 @@ SimpleCounter::SimpleCounter(const cv::Vec3b& step): result(0, 0, 0), step(step)
 SimpleCounter::SimpleCounter(const cv::Vec3b& step, const cv::Vec3b& zeroColor):
 		result(0), step(step), zeroColor(zeroColor) {
 
+}
+
+void SimpleCounter::reset() {
+	result[0] = result[1] = result[2] = 0;
 }
 
 void SimpleCounter::increment(const cv::Vec3b& value) {

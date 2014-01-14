@@ -14,6 +14,7 @@ class FastDimCounter {
 public:
 	class Counter {
 	public:
+		virtual void reset() = 0;
 		virtual void increment(const cv::Vec3b& value) = 0;
 		virtual const cv::Vec3i& getResult() = 0;
 	};
@@ -37,6 +38,7 @@ public:
 	SimpleCounter(const cv::Vec3b& step);
 	SimpleCounter(const cv::Vec3b& step, const cv::Vec3b& zeroColor);
 
+	void reset();
 	void increment(const cv::Vec3b& value);
 	const cv::Vec3i& getResult();
 private:

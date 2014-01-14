@@ -18,6 +18,8 @@ public:
 	virtual ~FastDIMHistogram();
 
 	void update(cv::Mat image);
+private:
+	int size;
 };
 
 #endif /* FASTDIMHISTOGRAM_H_ */
