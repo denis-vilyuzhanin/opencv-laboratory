@@ -12,7 +12,10 @@
 
 #include "histograms/Histogram.h"
 
+
+
 class FastDIMHistogram: public Histogram  {
+	friend static void onMouse( int event, int x, int y, int, void* );
 public:
 	FastDIMHistogram();
 	virtual ~FastDIMHistogram();
@@ -20,6 +23,9 @@ public:
 	void update(cv::Mat image);
 private:
 	int size;
+
+	int xToShow;
+	int yToShow;
 };
 
 #endif /* FASTDIMHISTOGRAM_H_ */

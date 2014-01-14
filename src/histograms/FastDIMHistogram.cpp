@@ -11,10 +11,15 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <algorithm>
+#include <iostream>
 
-FastDIMHistogram::FastDIMHistogram(): size(8) {
+
+
+FastDIMHistogram::FastDIMHistogram(): size(3), xToShow(-1), yToShow(-1) {
 	cv::namedWindow("FastDIM Histogram", CV_WINDOW_AUTOSIZE);
 	cv::createTrackbar("Size", "FastDIM Histogram", &size, 256 - 2);
+
+	cv::setMouseCallback("FastDIM Histogram", onMouse, this);
 }
 
 FastDIMHistogram::~FastDIMHistogram() {
@@ -24,6 +29,8 @@ FastDIMHistogram::~FastDIMHistogram() {
 static uchar toColor(double v) {
 	return 255 / 2 * v;
 }
+
+
 
 void FastDIMHistogram::update(cv::Mat image) {
 	const int TOTAL_SIZE = std::min(image.rows, image.cols);
@@ -45,7 +52,19 @@ void FastDIMHistogram::update(cv::Mat image) {
 				           8 );
 		}
 	}
-
 	cv::imshow("FastDIM Histogram", histImage);
 
+	if (xToShow > -1 && yToShow > -1) {
+		cv::Vec3b toShow = histImage.at<cv::Vec3b>(yToShow, xToShow);
+		std::cout<<"dim["<<xToShow<<","<<yToShow<<"] = "<< double(toShow[0] / 127)<<std::endl;
+		xToShow = yToShow = -1;
+	}
+}
+
+static void onMouse( int event, int x, int y, int flags, void* data) {
+	if( event != EVENT_LBUTTONDOWN )
+	        return;
+	FastDIMHistogram* thisHistogram = static_cast<FastDIMHistogram*>(data);
+	thisHistogram->xToShow = x;
+	thisHistogram->yToShow = y;
 }

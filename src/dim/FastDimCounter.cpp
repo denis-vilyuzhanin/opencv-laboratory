@@ -28,6 +28,9 @@ static cv::Vec3b getValue(const cv::Mat& image, int x, int y) {
 }
 
 static double dim(int n, int size) {
+	if (n == 0) {
+		return 0;
+	}
 	return log(double(n)) / log(double(size));
 }
 
