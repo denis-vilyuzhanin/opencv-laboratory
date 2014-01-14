@@ -34,14 +34,14 @@ static uchar toColor(double v) {
 
 void FastDIMHistogram::update(cv::Mat image) {
 	const int TOTAL_SIZE = std::min(image.rows, image.cols);
-	const int SIZE = std::min(size + 2, TOTAL_SIZE);
+	const int SIZE = std::min(size > 0 ? size : 2, TOTAL_SIZE);
 
 	cv::Mat histImage(image.rows , image.cols, CV_8UC3, cv::Scalar(0, 0, 0));
 	FastDimCounter counter(SIZE);
 	for(int i = 0; i < TOTAL_SIZE; i += SIZE) {
 		for(int j = 0; j < TOTAL_SIZE; j += SIZE) {
-			Mat subImage = image.colRange(i, std::min(i + SIZE - 1, image.cols))
-								.rowRange(j, std::min(j + SIZE - 1, image.rows));
+			Mat subImage = image.colRange(i, std::min(i + SIZE, image.cols))
+								.rowRange(j, std::min(j + SIZE, image.rows));
 			const cv::Vec3d& dim = counter.compute(subImage);
 			cv::Scalar color(toColor(dim[2]), toColor(dim[1]), toColor(dim[0]));
 			cv::rectangle( histImage,
@@ -56,7 +56,7 @@ void FastDIMHistogram::update(cv::Mat image) {
 
 	if (xToShow > -1 && yToShow > -1) {
 		cv::Vec3b toShow = histImage.at<cv::Vec3b>(yToShow, xToShow);
-		std::cout<<"dim["<<xToShow<<","<<yToShow<<"] = "<< double(toShow[0] / 127)<<std::endl;
+		std::cout<<"dim["<<xToShow<<","<<yToShow<<"] = "<< double(toShow[0] / 127.0)<<std::endl;
 		xToShow = yToShow = -1;
 	}
 }
