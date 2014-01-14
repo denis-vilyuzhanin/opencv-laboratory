@@ -17,6 +17,7 @@ using namespace std;
 #include "histograms/RGBHistogram.h"
 #include "histograms/HSLHistogram.h"
 #include "histograms/DIMHistogram.h"
+#include "histograms/FastDIMHistogram.h"
 
 #include "edge/SobelEdgeDetector.h"
 
@@ -107,6 +108,8 @@ public:
 				histogram = new HSLHistogram();
 			} else if (type == "dim") {
 				histogram = new DIMHistogram();
+			} else if (type == "fastDIM") {
+				histogram = new FastDIMHistogram();
 			}
 
 			if (histogram != 0) {
